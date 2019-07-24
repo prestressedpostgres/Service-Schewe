@@ -1,0 +1,38 @@
+
+	[{
+	"name": "THE KITCHEN",
+	"style": "American",
+	"price": "$$$",
+	"description": "Farm-to-table American food in an urban space, plus drinks from the upstairs community bar.",
+	"rating": 4.5,
+	"img_url": "https://zagat-photos.imgix.net/ChIJbfI25Sbsa4cRMz0wQhLNRB4/b9a42b5a9b40f75163bd15ab4ae19e59.jpg?max-w=1400&auto=format",
+	"location": [40.012345, -105.289000]
+	},
+	{
+		"name": "SALT THE BISTRO",
+		"style": "Brunch",
+		"price": "$$",
+		"description": "Farm-to-table American eats with changing menu using local ingredients in cuisine & cocktails.",
+		"rating": 4.3,
+		"img_url": "https://zagat-photos.imgix.net/ChIJvfYP-ybsa4cRaIq4kQe5JME/2ae51aff678977a22abece82e8da8499.jpg?max-w=1400&auto=format",
+		"location": [40.012345, -105.289000]
+		},
+		{
+			"name": "SPRUCE FARM & FISH",
+			"style": "American",
+			"price": "$$",
+			"description": "Polished fixture at the Hotel Boulderado serving seasonal modern New American cuisine & fine wines.",
+			"rating": 4.0,
+			"img_url": "https://zagat-photos.imgix.net/ChIJH68pxyfsa4cRmlqp7By1XYE/36521024c481478c8a24cb24a5d45f3a.jpg?max-w=1400&auto=format",
+			"location": [40.012345, -105.289000]
+		},
+		{
+			"name": "NEXT DOOR",
+			"style": "Vegan",
+			"price": "$$",
+			"description": "Adjacent to its namesake flagship, a casual hot spot for farm-to-table comfort food & craft beer.",
+			"rating": 3.9,
+			"img_url": "https://zagat-photos.imgix.net/ChIJdzSU5Sbsa4cRWOQomlwYqxI/9c269383b4cc2b2909264457f42bcb4b.jpg?max-w=1400&auto=format",
+			"location": [40.012345, -105.289000]
+		}
+	]
