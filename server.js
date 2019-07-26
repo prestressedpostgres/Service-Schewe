@@ -1,20 +1,28 @@
 const express = require('express');
-const db = require('./database/db.js')
+const db = require('./database/db.js');
 const bodyParser = require('body-parser');
 const app = express();
 
-app.use(express.static('./client/dist'))
-app.use(bodyParser.json())
+app.use(express.static('./client/dist'));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const port = 3001;
 
 app.post('/', (req, res) => {
-  db.save(req.body)
-  res.send(console.log('posted to Zagat database'))
-})
+  db.save(req.body);
+  res.send(console.log('posted to Zagat database'));
+});
 
 app.get('/api/cities', (req, res) => {
   db.load(res.send.bind(res));
+});
+
+app.put('/api/', (req, res) => {
+// some functionality here
+});
+
+app.delete('/api/restaurant/:name', (req, res) => {
+  // some functionality here
 });
 
 app.get('/restaurant', (req, res) => {
