@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/zagat', { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost/zagatdb', { useNewUrlParser: true });
 
-let db = mongoose.connection
+let db = mongoose.connection;
 
 db.once('open', () => {
   console.log('you made a database connection')
@@ -12,37 +12,36 @@ db.once('open', () => {
 
 let restuarantSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  description: String,
-  style: String,
-  price: String,
-  rating: String,
-  img_url: String,
-  location: Array
+  description: String
+  // style: String,
+  // price: String,
+  // rating: String,
+  // img_url: String,
+  // location: Array
 });
 
 let Restaurants = mongoose.model('Cities', restuarantSchema);
 
 let save = (restaurant, callback) => {
-
-  Restaurants.find({ name: restaurant.name }).exec((err, result) => {
-    if (err) return err;
-    if (result.length) return;
-    else {
+  // Restaurants.find({ name: restaurant.name }).exec((err, result) => {
+  //   if (err) return err;
+  //   if (result.length) return;
+  //   else {
       let newRestaurants = new Restaurants({
         name: restaurant.name,
-        description: restaurant.description,
-        style: restaurant.style,
-        price: restaurant.price,
-        rating: restaurant.rating,
-        img_url: restaurant.img_url,
-        location: restaurant.location
-      })
+        description: restaurant.description
+        // style: restaurant.style,
+        // price: restaurant.price,
+        // rating: restaurant.rating,
+        // img_url: restaurant.img_url,
+        // location: restaurant.location
+      });
       newRestaurants.save(err => {
         if (err) console.log(err)
       })
     }
-  })
-}
+//   })
+// }
 
 let load = callback => {
   let cb = (err, result) => { callback(result) };

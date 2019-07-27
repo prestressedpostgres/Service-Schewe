@@ -3,7 +3,45 @@ const faker = require('faker');
 const fs = require('fs');
 const db = require('./db');
 const axios = require('axios');
-const API_KEY = require('../config.js').API_KEY
+const API_KEY = require('../config.js').API_KEY;
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const csvFile = require('./testData.csv');
+
+const csvWriter = createCsvWriter({
+    path: './testData.csv',
+    header: [
+        // {id: 'name'},
+        // {id: 'description'}
+    ]
+});
+
+const records = [
+    {name: 'The Kitchen',  description: 'Americanish'},
+    {name: 'Centro', description: 'Mexicanish'}
+];
+
+csvWriter.writeRecords(records)       // returns a promise
+    .then(() => {
+        console.log('...Done');
+	});
+	
+// change restaurantNames.length below to specify a certain number of entries in the DB
+// schema will need some tweaking as well
+let dataGenerator = () => {
+	let randomEntry = Math.ceil(Math.random() * 100);
+	for (var i = 0; i < 10; i++) {
+		db.save({
+			name: restaurantNames[randomEntry],
+			description: randomSentence()
+			// style: styleGenerator(),
+			// price: priceGenerator(),
+			// rating: randomScore(),
+			// img_url: imageUrls[randomEntry],
+			// location: coordinateGenerator()
+		});
+	}
+}
+
 
 Sentencer.configure({
 	nounList: ["ingredients", "cuisine", "cocktails", "food", "craft beer",
@@ -14,46 +52,15 @@ Sentencer.configure({
 		"ethnic", "excellent", "fabulous", "famous", "fancy", "fine", "formal", "french", "friendly", "great", "independent", "interesting", "mexican",
 		"outdoor", "outstanding", "parisian", "popular", "posh", "high quality", "renowned", "romantic", "simple", "smart", "sophisticated", "spanish",
 		"stylish", "superb", "themed", "traditional", "trendy", "upscale", "vietnamese", "wonderful", "family-run"]
-
 });
 
-let randomSentence = () => {
+// restaurant names to be used
+let restaurantNames = ["CENTRO", "JULEP", "DIO MIO", "SAFTA", "BARTACO", "BRASSERIE TEN TEN", "RVER & WOODS", "THE MED", "CHINA GOURMET", "HAPA SUSHI", "BOULDER CHOPHOUSE", "SUSHI ZAN MAI", "DENVER CHOPHOUSE", "TACOS TEQUILA WHISKEY", "OHANA ISLAND KITCHEN", "ROCKY FIN POKE BAR", "COMMUNITY", "RIOJA", "OAK", "THE KITCHEN", "DARK HORSE", "ACREAGE", "TAVERNETTA", "OSTERIA MARCO", "RACINES", "LINGER", "RIO GRANDE", "MCDEVITT TACO SUPPLY", "SANITA BREWING COMPANY", "BOULDER BEER COMPANY", "AVERY BREWING COMPANY", "ARCANA", "BRU HANDBUILT ALES & EATS", "VIA PEARLA", "SNOOZE AN A.M. EATERY, BLD", "SNOOZE AN A.M. EATERY", "THE POST BREWING CO. - BOULDER", "THE POST BREWING CO. - BOULDER",
+"THE YELLOW DELI", "THE POST BREWING CO. - LONGMONT", "SALT", "GB FISH AND CHIPS", "PINTS PUB - BRITISH GASTRO BREWPUB", "CUBA CUBA CAFE & BAR", "MIZUNA", "THE FAINTING GOAT", "TABLE 6", "FRUITION RESTAURANT", "SUSHI DEN", "IZAKAYA DEN", "OTOTO", "VENICE ITALIAN RESTAURANT", "MERCANTILE DINING AND PROVISIONS", "VILLAGE COFFEE SHOP", "THE PARKWAY CAFE", "LUCKY\'S CAFE", "SAM'S NO.3", "OFFICERS CLUB", "DENVER BISCUIT COMPANY", "ANNETTE", "BEAST AND BOTTLE", "STAR KITCHEN", "OPHELIA'S ELECTRIC SOAP BOX", "QUALITY ITALIAN", "TOKYO PREMIUM BAKERY", "YANNI'S GREEK RESTAURANT", "THE SINK", "BIKER JIM'S", "THE LOBBY", "ELWAY\'S", "THE CAPITAL GRILL", "OCEAN PRIME", "THIRSTY LION GASTROPUB - UNION STATION", "MELLOW MUSHROOM", "RIALTO CAFE", "FRASCA FOOD AND WINE", "IL PASTAIO RISTORANTE", "SFORNO TRATTORIA ROMANA", "ELLYNGTON'S", "PARK & CO", "CITY GRILLE", "TORCHY\'S TACOS", "FLAGSTAFF HOUSE", "BLACK CAT", "NEXT DOOR", "CURRY N KEBOB", "JAPANGO", "WILD STANDARD", "ZOLO SOUTHWESTERN GRILL", "JAX FISHOUSE & OYSTER BAR - BOULDER", "THE WEST END TAVERN", "THE BOULDER DUSHANBE TEAHOUSE", "HUMBOLDT FARM, FISH, WINE", "ACORN", "BANG UP TO THE ELEPHANT!", "ALOY MODERN THAI", "THE POPULIST", "MORIN", "RYE SOCIETY", "BECKON"];
 
-	let num = Math.ceil(Math.random() * 3)
-
-	if (num === 3) {
-		let sentence = Sentencer.make("{{ adjective }}, locally sourced {{ noun }} with {{ noun }} & {{ noun }}.");
-		return sentence;
-	}
-	if (num === 2) {
-		let sentence = Sentencer.make("{{ adjective }}, with changing menu using local ingredients in {{ noun }} & {{ noun }}.");
-		return sentence;
-	}
-	if (num === 1) {
-		let sentence = Sentencer.make("{{ adjective }} {{noun}}, a seasonal menu of {{ adjective }} {{ noun }}, {{ adjective }} {{ noun }} & {{ noun }}.");
-		return sentence;
-	}
-}
-
-
-let randomScore = () => {
-	let rating = ((Math.random() * 3) + 2);
-	return rating.toFixed(1);
-}
-
-let restaurantNames = ["CENTRO", "JULEP", "DIO MIO", "SAFTA", "BARTACO", "BRASSERIE TEN TEN", "RVER & WOODS", "THE MED", "CHINA GOURMET", "HAPA SUSHI",
-	"BOULDER CHOPHOUSE", "SUSHI ZAN MAI", "DENVER CHOPHOUSE", "TACOS TEQUILA WHISKEY", "OHANA ISLAND KITCHEN", "ROCKY FIN POKE BAR", "COMMUNITY", "RIOJA", "OAK",
-	"THE KITCHEN", "DARK HORSE", "ACREAGE", "TAVERNETTA", "OSTERIA MARCO", "RACINES", "LINGER", "RIO GRANDE", "MCDEVITT TACO SUPPLY", "SANITA BREWING COMPANY", "BOULDER BEER COMPANY",
-	"AVERY BREWING COMPANY", "ARCANA", "BRU HANDBUILT ALES & EATS", "VIA PEARLA", "SNOOZE AN A.M. EATERY, BLD", "SNOOZE AN A.M. EATERY", "THE POST BREWING CO. - BOULDER", "THE POST BREWING CO. - BOULDER",
-	"THE YELLOW DELI", "THE POST BREWING CO. - LONGMONT", "SALT", "GB FISH AND CHIPS", "PINTS PUB - BRITISH GASTRO BREWPUB", "CUBA CUBA CAFE & BAR", "MIZUNA", "THE FAINTING GOAT", "TABLE 6",
-	"FRUITION RESTAURANT", "SUSHI DEN", "IZAKAYA DEN", "OTOTO", "VENICE ITALIAN RESTAURANT", "MERCANTILE DINING AND PROVISIONS", "VILLAGE COFFEE SHOP", "THE PARKWAY CAFE", "LUCKY\'S CAFE", "SAM'S NO.3",
-	"OFFICERS CLUB", "DENVER BISCUIT COMPANY", "ANNETTE", "BEAST AND BOTTLE", "STAR KITCHEN", "OPHELIA'S ELECTRIC SOAP BOX", "QUALITY ITALIAN", "TOKYO PREMIUM BAKERY", "YANNI'S GREEK RESTAURANT",
-	"THE SINK", "BIKER JIM'S", "THE LOBBY", "ELWAY\'S", "THE CAPITAL GRILL", "OCEAN PRIME", "THIRSTY LION GASTROPUB - UNION STATION", "MELLOW MUSHROOM", "RIALTO CAFE", "FRASCA FOOD AND WINE",
-	"IL PASTAIO RISTORANTE", "SFORNO TRATTORIA ROMANA", "ELLYNGTON'S", "PARK & CO", "CITY GRILLE", "TORCHY\'S TACOS", "FLAGSTAFF HOUSE", "BLACK CAT", "NEXT DOOR", "CURRY N KEBOB", "JAPANGO",
-	"WILD STANDARD", "ZOLO SOUTHWESTERN GRILL", "JAX FISHOUSE & OYSTER BAR - BOULDER", "THE WEST END TAVERN", "THE BOULDER DUSHANBE TEAHOUSE", "HUMBOLDT FARM, FISH, WINE", "ACORN", "BANG UP TO THE ELEPHANT!",
-	"ALOY MODERN THAI", "THE POPULIST", "MORIN", "RYE SOCIETY", "BECKON"]
-
-let imageUrls = ["https://zagat-photos.imgix.net/ChIJdzSU5Sbsa4cRWOQomlwYqxI/9c269383b4cc2b2909264457f42bcb4b.jpg?h=224&w=224&fit=crop&q=75&fm=jpg&auto=format", "http://juleprino.com/wp-content/uploads/2018/02/menu.jpg",
+// images to be used
+let imageUrls = ["https://zagat-photos.imgix.net/ChIJdzSU5Sbsa4cRWOQomlwYqxI/9c269383b4cc2b2909264457f42bcb4b.jpg?h=224&w=224&fit=crop&q=75&fm=jpg&auto=format",
+"http://juleprino.com/wp-content/uploads/2018/02/menu.jpg",
 	"https://media-cdn.tripadvisor.com/media/photo-s/0e/43/f5/fb/photo1jpg.jpg",
 	"https://scontent-sjc3-1.xx.fbcdn.net/v/t1.0-9/40883757_1548306981981738_7043764687770484736_o.jpg?_nc_cat=108&_nc_oc=AQn4b_QVWLf6L9UYgbv4caApTp_9RJSuTtoZppH8P5DsdU0Av6P_S6BOyE1cCXeLtQ8&_nc_ht=scontent-sjc3-1.xx&oh=ef5093bb5a48781fa37dcba886637465&oe=5DAF78B0",
 	"https://cdn.vox-cdn.com/thumbor/leJUx_9YvcyuN_aUhbT4syzI8tA=/0x0:1920x1280/1520x1013/filters:focal(807x487:1113x793):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/62704908/bartaco.0.jpg",
@@ -152,17 +159,15 @@ let imageUrls = ["https://zagat-photos.imgix.net/ChIJdzSU5Sbsa4cRWOQomlwYqxI/9c2
 	"https://media-cdn.tripadvisor.com/media/photo-p/16/06/03/1c/morin.jpg",
 	"http://diningoutwp.funjuczse.maxcdn-edge.com/denverboulder/wp-content/uploads/sites/13/2018/07/IMG_4108.jpg",
 	"https://media-cdn.tripadvisor.com/media/photo-s/17/a1/f2/de/photo3jpg.jpg"
-]
+];
 
 let coordinateGenerator = () => {
-
 	let latitude = Math.random() * 0.05 + 40;
 	let longitude = Math.random() * (-0.07) - 105.22;
-
-	return [Number(latitude.toFixed(6)), Number(longitude.toFixed(6))]
+	return [Number(latitude.toFixed(6)), Number(longitude.toFixed(6))];
 }
 
-let syleGenerator = () => {
+let styleGenerator = () => {
 	let styles = ["American", "Vegan", "Brunch", "Thai", "Seafood", "Bakery", "Coffee House", "Grill"];
 	let index = Math.floor(Math.random() * styles.length);
 	return styles[index];
@@ -175,21 +180,30 @@ let priceGenerator = () => {
 	else return "$";
 }
 
-let dataGenerator = () => {
-
-	for (var i = 0; i < restaurantNames.length; i++) {
-		db.save({
-			name: restaurantNames[i],
-			description: randomSentence(),
-			style: syleGenerator(),
-			price: priceGenerator(),
-			rating: randomScore(),
-			img_url: imageUrls[i],
-			location: coordinateGenerator()
-		})
+// create a random sentence to be used in the description - not stored in the DB
+let randomSentence = () => {
+	let num = Math.ceil(Math.random() * 3)
+	if (num === 3) {
+		let sentence = Sentencer.make("{{ adjective }}, locally sourced {{ noun }} with {{ noun }} & {{ noun }}.");
+		return sentence;
+	}
+	if (num === 2) {
+		let sentence = Sentencer.make("{{ adjective }}, with changing menu using local ingredients in {{ noun }} & {{ noun }}.");
+		return sentence;
+	}
+	if (num === 1) {
+		let sentence = Sentencer.make("{{ adjective }} {{noun}}, a seasonal menu of {{ adjective }} {{ noun }}, {{ adjective }} {{ noun }} & {{ noun }}.");
+		return sentence;
 	}
 }
 
-dataGenerator();
+// randomize the score for each set of data - stored in the DB
+let randomScore = () => {
+	let rating = ((Math.random() * 3) + 2);
+	return rating.toFixed(1);
+}
+
+// invoke seeding function
+// dataGenerator();
 
 module.exports.dataGenerator = dataGenerator;
