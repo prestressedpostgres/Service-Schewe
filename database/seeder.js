@@ -5,42 +5,10 @@ const db = require('./db');
 const axios = require('axios');
 const API_KEY = require('../config.js').API_KEY;
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-const csvFile = require('./testData.csv');
-
-const csvWriter = createCsvWriter({
-    path: './testData.csv',
-    header: [
-        // {id: 'name'},
-        // {id: 'description'}
-    ]
-});
-
-const records = [
-    {name: 'The Kitchen',  description: 'Americanish'},
-    {name: 'Centro', description: 'Mexicanish'}
-];
-
-csvWriter.writeRecords(records)       // returns a promise
-    .then(() => {
-        console.log('...Done');
-	});
+// const csvFile = require('./testData.csv');
 	
 // change restaurantNames.length below to specify a certain number of entries in the DB
 // schema will need some tweaking as well
-let dataGenerator = () => {
-	let randomEntry = Math.ceil(Math.random() * 100);
-	for (var i = 0; i < 10; i++) {
-		db.save({
-			name: restaurantNames[randomEntry],
-			description: randomSentence()
-			// style: styleGenerator(),
-			// price: priceGenerator(),
-			// rating: randomScore(),
-			// img_url: imageUrls[randomEntry],
-			// location: coordinateGenerator()
-		});
-	}
-}
 
 
 Sentencer.configure({
@@ -55,7 +23,7 @@ Sentencer.configure({
 });
 
 // restaurant names to be used
-let restaurantNames = ["CENTRO", "JULEP", "DIO MIO", "SAFTA", "BARTACO", "BRASSERIE TEN TEN", "RVER & WOODS", "THE MED", "CHINA GOURMET", "HAPA SUSHI", "BOULDER CHOPHOUSE", "SUSHI ZAN MAI", "DENVER CHOPHOUSE", "TACOS TEQUILA WHISKEY", "OHANA ISLAND KITCHEN", "ROCKY FIN POKE BAR", "COMMUNITY", "RIOJA", "OAK", "THE KITCHEN", "DARK HORSE", "ACREAGE", "TAVERNETTA", "OSTERIA MARCO", "RACINES", "LINGER", "RIO GRANDE", "MCDEVITT TACO SUPPLY", "SANITA BREWING COMPANY", "BOULDER BEER COMPANY", "AVERY BREWING COMPANY", "ARCANA", "BRU HANDBUILT ALES & EATS", "VIA PEARLA", "SNOOZE AN A.M. EATERY, BLD", "SNOOZE AN A.M. EATERY", "THE POST BREWING CO. - BOULDER", "THE POST BREWING CO. - BOULDER",
+let restaurantNames = ["CENTRO", "JULEP", "DIO MIO", "SAFTA", "BARTACO", "BRASSERIE TEN TEN", "RVER & WOODS", "THE MED", "CHINA GOURMET", "HAPA SUSHI", "BOULDER CHOPHOUSE", "SUSHI ZAN MAI", "DENVER CHOPHOUSE", "TACOS TEQUILA WHISKEY", "OHANA ISLAND KITCHEN", "ROCKY FIN POKE BAR", "COMMUNITY", "RIOJA", "OAK", "THE KITCHEN", "DARK HORSE", "ACREAGE", "TAVERNETTA", "OSTERIA MARCO", "RACINES", "LINGER", "RIO GRANDE", "MCDEVITT TACO SUPPLY", "SANITA BREWING COMPANY", "BOULDER BEER COMPANY", "AVERY BREWING COMPANY", "ARCANA", "BRU HANDBUILT ALES & EATS", "VIA PEARLA", "SNOOZE AN A.M. EATERY, BLD", "SNOOZE AN A.M. EATERY", "THE POST BREWING CO. - BOULDER", "THE POST BREWING CO. - DENVER",
 "THE YELLOW DELI", "THE POST BREWING CO. - LONGMONT", "SALT", "GB FISH AND CHIPS", "PINTS PUB - BRITISH GASTRO BREWPUB", "CUBA CUBA CAFE & BAR", "MIZUNA", "THE FAINTING GOAT", "TABLE 6", "FRUITION RESTAURANT", "SUSHI DEN", "IZAKAYA DEN", "OTOTO", "VENICE ITALIAN RESTAURANT", "MERCANTILE DINING AND PROVISIONS", "VILLAGE COFFEE SHOP", "THE PARKWAY CAFE", "LUCKY\'S CAFE", "SAM'S NO.3", "OFFICERS CLUB", "DENVER BISCUIT COMPANY", "ANNETTE", "BEAST AND BOTTLE", "STAR KITCHEN", "OPHELIA'S ELECTRIC SOAP BOX", "QUALITY ITALIAN", "TOKYO PREMIUM BAKERY", "YANNI'S GREEK RESTAURANT", "THE SINK", "BIKER JIM'S", "THE LOBBY", "ELWAY\'S", "THE CAPITAL GRILL", "OCEAN PRIME", "THIRSTY LION GASTROPUB - UNION STATION", "MELLOW MUSHROOM", "RIALTO CAFE", "FRASCA FOOD AND WINE", "IL PASTAIO RISTORANTE", "SFORNO TRATTORIA ROMANA", "ELLYNGTON'S", "PARK & CO", "CITY GRILLE", "TORCHY\'S TACOS", "FLAGSTAFF HOUSE", "BLACK CAT", "NEXT DOOR", "CURRY N KEBOB", "JAPANGO", "WILD STANDARD", "ZOLO SOUTHWESTERN GRILL", "JAX FISHOUSE & OYSTER BAR - BOULDER", "THE WEST END TAVERN", "THE BOULDER DUSHANBE TEAHOUSE", "HUMBOLDT FARM, FISH, WINE", "ACORN", "BANG UP TO THE ELEPHANT!", "ALOY MODERN THAI", "THE POPULIST", "MORIN", "RYE SOCIETY", "BECKON"];
 
 // images to be used
@@ -161,38 +129,41 @@ let imageUrls = ["https://zagat-photos.imgix.net/ChIJdzSU5Sbsa4cRWOQomlwYqxI/9c2
 	"https://media-cdn.tripadvisor.com/media/photo-s/17/a1/f2/de/photo3jpg.jpg"
 ];
 
+// generates random location
 let coordinateGenerator = () => {
 	let latitude = Math.random() * 0.05 + 40;
 	let longitude = Math.random() * (-0.07) - 105.22;
 	return [Number(latitude.toFixed(6)), Number(longitude.toFixed(6))];
 }
 
+// generates random style
 let styleGenerator = () => {
 	let styles = ["American", "Vegan", "Brunch", "Thai", "Seafood", "Bakery", "Coffee House", "Grill"];
 	let index = Math.floor(Math.random() * styles.length);
 	return styles[index];
 }
 
+// generates random price - can't use '$' in postgres to start off a section of csv file
 let priceGenerator = () => {
 	let num = Math.ceil(Math.random() * 3);
-	if (num === 3) return "$$$";
-	if (num == 2) return "$$";
-	else return "$";
+	if (num === 3) return "expensive";
+	if (num == 2) return "average";
+	else return "cheap";
 }
 
 // create a random sentence to be used in the description - not stored in the DB
 let randomSentence = () => {
 	let num = Math.ceil(Math.random() * 3)
 	if (num === 3) {
-		let sentence = Sentencer.make("{{ adjective }}, locally sourced {{ noun }} with {{ noun }} & {{ noun }}.");
+		let sentence = Sentencer.make("{{ adjective }}, locally sourced {{ noun }} with {{ noun }} & {{ noun }}");
 		return sentence;
 	}
 	if (num === 2) {
-		let sentence = Sentencer.make("{{ adjective }}, with changing menu using local ingredients in {{ noun }} & {{ noun }}.");
+		let sentence = Sentencer.make("{{ adjective }}, with changing menu using local ingredients in {{ noun }} & {{ noun }}");
 		return sentence;
 	}
 	if (num === 1) {
-		let sentence = Sentencer.make("{{ adjective }} {{noun}}, a seasonal menu of {{ adjective }} {{ noun }}, {{ adjective }} {{ noun }} & {{ noun }}.");
+		let sentence = Sentencer.make("{{ adjective }} {{noun}}, a seasonal menu of {{ adjective }} {{ noun }}, {{ adjective }} {{ noun }} & {{ noun }}");
 		return sentence;
 	}
 }
@@ -206,4 +177,98 @@ let randomScore = () => {
 // invoke seeding function
 // dataGenerator();
 
+// writes to a csv file indicated by path
+let csvWriter = createCsvWriter({
+    path: './testData5.csv',
+    header: ['name', 'description', 'style', 'price', 'rating', 'img_url', 'location']
+});
+
+// dataset to be used when creating csv files
+let records0 = [];
+
+let dataGenerator = (array) => {
+	let randomEntry = 0;
+	for (var i = 0; i < 3000000; i++) { // modify the number to the left to insert a differnet amount of entries
+		// db.save({
+			randomEntry = Math.ceil(Math.random() * restaurantNames.length - 1);
+			array.push({
+			name: restaurantNames[randomEntry],
+			description: randomSentence(),
+			style: styleGenerator(),
+			price: priceGenerator(),
+			rating: randomScore(),
+			img_url: imageUrls[randomEntry],
+			location: coordinateGenerator()
+		// });
+			});
+	}
+}
+
+
+/* *************************************************************
+* in the command line, type "npm run seed" to initiate the seeding process for one file
+* ~30 seconds to generate 3,000,000 entries and write them to a csv file
+* file path needs to be changed manually
+* ~42 seconds to import csv file of 3,000,000 entries into mongoDB
+************************************************************* */
+
+
+// show the time it took to issue the generation and csv file creation:
+console.time('Processing time: ');
+dataGenerator(records0);  
+csvWriter.writeRecords(records0)     // returns a promise
+.then(() => {
+	console.timeEnd('Processing time: ');
+});
+
+// Promise.resolve()
+// .then(() => csvWriter.writeRecords(dataGenerator()))
+// .then(() => csvWriter.writeRecords(dataGenerator()))
+// .then(() => csvWriter.writeRecords(dataGenerator()))
+
 module.exports.dataGenerator = dataGenerator;
+
+
+// * CSV file paths:
+// /Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/testData1.csv
+// /Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/testData2.csv
+// /Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/testData3.csv
+// /Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/testData4.csv
+// * Test files:
+// /Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/testData5.csv
+// /Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/mongoCsvTest.csv
+
+// *USE THE FOLLOWING COMMANDS TO HELP IMPORT A CSV FILE INTO MONGODB
+// ** DO NOT use the shell for mongo - use a new terminal
+// template>>>> mongoimport --db users --collection contacts --type csv --headerline --file /opt/backups/contacts.csv
+// actual>>>>>> mongoimport --db zagatdb --collection cities --type csv --headerline --file 
+
+// USEFUL shell commands:
+// db.collection.count()
+// db.collection.remove({})
+// db.collection.find().pretty()
+// ps -ef | grep mongo
+
+
+// * in postgres:
+/*
+CREATE TABLE restaurants (
+    name VARCHAR,
+    description VARCHAR,
+    style VARCHAR,
+    price VARCHAR,
+    rating VARCHAR,
+    img_url VARCHAR,
+    location VARCHAR
+);
+
+SELECT * FROM restaurants;
+COPY restaurants FROM '/Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/mongoCsvTest.csv' WITH CSV HEADER;
+DROP TABLE restaurants;
+
+
+COPY restaurants FROM '/Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/testData1.csv' WITH CSV HEADER;
+COPY restaurants FROM '/Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/testData2.csv' WITH CSV HEADER;
+COPY restaurants FROM '/Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/testData3.csv' WITH CSV HEADER;
+COPY restaurants FROM '/Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/testData4.csv' WITH CSV HEADER;
+*/

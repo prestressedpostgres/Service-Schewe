@@ -5,19 +5,19 @@ mongoose.connect('mongodb://localhost/zagatdb', { useNewUrlParser: true });
 let db = mongoose.connection;
 
 db.once('open', () => {
-  console.log('you made a database connection')
+  console.log('Connected to database')
 }).on('error', (error) => {
   console.log(error);
 })
 
 let restuarantSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  description: String
-  // style: String,
-  // price: String,
-  // rating: String,
-  // img_url: String,
-  // location: Array
+  description: String,
+  style: String,
+  price: String,
+  rating: String,
+  img_url: String,
+  location: Array
 });
 
 let Restaurants = mongoose.model('Cities', restuarantSchema);
@@ -28,13 +28,13 @@ let save = (restaurant, callback) => {
   //   if (result.length) return;
   //   else {
       let newRestaurants = new Restaurants({
-        name: restaurant.name,
-        description: restaurant.description
-        // style: restaurant.style,
-        // price: restaurant.price,
-        // rating: restaurant.rating,
-        // img_url: restaurant.img_url,
-        // location: restaurant.location
+        'name': restaurant.name,
+        'description': restaurant.description,
+        'style': restaurant.style,
+        'price': restaurant.price,
+        'rating': restaurant.rating,
+        'img_url': restaurant.img_url,
+        'location': restaurant.location
       });
       newRestaurants.save(err => {
         if (err) console.log(err)
