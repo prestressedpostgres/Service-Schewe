@@ -179,8 +179,17 @@ let randomScore = () => {
 
 // writes to a csv file indicated by path
 let csvWriter = createCsvWriter({
-    path: './testData5.csv',
-    header: ['name', 'description', 'style', 'price', 'rating', 'img_url', 'location']
+    path: './testData4.csv',
+    header: [
+		{id: 'id', title: 'ID'},
+		{id: 'name', title: 'NAME'},
+		{id: 'description', title: 'DESCRIPTION'},
+		{id: 'style', title: 'STYLE'},
+		{id: 'price', title: 'PRICE'},
+		{id: 'rating', title: 'RATING'},
+		{id: 'img_url', title: 'IMG_URL'},
+		{id: 'location', title: 'LOCATION'},
+	]
 });
 
 // dataset to be used when creating csv files
@@ -188,17 +197,18 @@ let records0 = [];
 
 let dataGenerator = (array) => {
 	let randomEntry = 0;
-	for (var i = 0; i < 3000000; i++) { // modify the number to the left to insert a differnet amount of entries
+	for (var i = 1; i <= 1000000; i++) { // modify the number to the left to insert a differnet amount of entries
 		// db.save({
 			randomEntry = Math.ceil(Math.random() * restaurantNames.length - 1);
 			array.push({
-			name: restaurantNames[randomEntry],
-			description: randomSentence(),
-			style: styleGenerator(),
-			price: priceGenerator(),
-			rating: randomScore(),
-			img_url: imageUrls[randomEntry],
-			location: coordinateGenerator()
+				id: i,
+				name: restaurantNames[randomEntry],
+				description: randomSentence(),
+				style: styleGenerator(),
+				price: priceGenerator(),
+				rating: randomScore(),
+				img_url: imageUrls[randomEntry],
+				location: coordinateGenerator()
 		// });
 			});
 	}
@@ -241,7 +251,7 @@ module.exports.dataGenerator = dataGenerator;
 // *USE THE FOLLOWING COMMANDS TO HELP IMPORT A CSV FILE INTO MONGODB
 // ** DO NOT use the shell for mongo - use a new terminal
 // template>>>> mongoimport --db users --collection contacts --type csv --headerline --file /opt/backups/contacts.csv
-// actual>>>>>> mongoimport --db zagatdb --collection cities --type csv --headerline --file 
+// actual>>>>>> mongoimport --db zagatdb --collection cities --type csv --headerline --file /Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/testData4.csv
 
 // USEFUL shell commands:
 // db.collection.count()
@@ -250,9 +260,10 @@ module.exports.dataGenerator = dataGenerator;
 // ps -ef | grep mongo
 
 
-// * in postgres:
+// * USE THE FOLLOWING COMMANDS TO HELP IMPORT A CSV FILE INTO POSTGRES
 /*
 CREATE TABLE restaurants (
+	id SERIAL PRIMARY KEY,
     name VARCHAR,
     description VARCHAR,
     style VARCHAR,

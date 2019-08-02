@@ -11,6 +11,7 @@ db.once('open', () => {
 })
 
 let restuarantSchema = new mongoose.Schema({
+  id: Number,
   name: { type: String, required: true },
   description: String,
   style: String,
@@ -23,20 +24,21 @@ let restuarantSchema = new mongoose.Schema({
 let Restaurants = mongoose.model('Cities', restuarantSchema);
 
 //check to see if a particular restaurant exists in the DB already
-//if not, create a new object with information and save it to the DB
 let save = (restaurant, callback) => {
-  Restaurants.find({ name: restaurant.name }).exec((err, result) => {
+  Restaurants.find({ name: this.name }).exec((err, result) => {
     if (err) return err;
     if (result.length) return;
     else {
+      //if not already in DB, create a new object with information and save it to the DB
       let newRestaurants = new Restaurants({
-        'name': restaurant.name,
-        'description': restaurant.description,
-        'style': restaurant.style,
-        'price': restaurant.price,
-        'rating': restaurant.rating,
-        'img_url': restaurant.img_url,
-        'location': restaurant.location
+        'id': id,
+        'name': name,
+        'description': description,
+        'style': style,
+        'price': price,
+        'rating': rating,
+        'img_url': img_url,
+        'location': location
       });
       newRestaurants.save(err => {
         if (err) console.log(err)

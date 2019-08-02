@@ -1,12 +1,13 @@
 config:
-  target: 'https://localhost:3000'
+  # make sure the target below is not https, otherwise all requests will result in errors
+  target: 'http://localhost:4000' 
   phases:
-    - duration: 15
+    - duration: 30
       arrivalRate: 1000
-  defaults:
-    headers:
-      x-my-service-auth: '987401838271002188298567'
+  # defaults:
+  #   headers:
+  #     x-my-service-auth: '987401838271002188298567'
 scenarios:
   - flow:
     - get:
-        url: "/api/cities"
+        url: '/restaurants/42'

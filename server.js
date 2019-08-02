@@ -8,7 +8,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const port = 3000;
 
-app.get('/api/cities', (req, res) => {
+app.get('/restaurants/:name', (req, res) => {
+  // this should have the specific name in the load functionality
+  db.load(res.send.bind(res));
+  res.send(console.log('loaded Zagat information'));
+});
+
+app.get('/restaurants/:name', (req, res) => {
   db.load(res.send.bind(res));
   res.send(console.log('loaded Zagat information'));
 });
@@ -18,13 +24,13 @@ app.post('/', (req, res) => {
   res.send(console.log('posted to Zagat database'));
 });
 
-app.put('/api/', (req, res) => {
+app.put('/restaurants/', (req, res) => {
   // some functionality here
   res.send(console.log('database updated'));
 });
 
-app.delete('/api/restaurant/:name', (req, res) => {
-  // some functionality here
+app.delete('/restaurants/:name', (req, res) => {
+  db.remove({id:req.params.id});
   res.send(console.log('record delted'));
 });
 
