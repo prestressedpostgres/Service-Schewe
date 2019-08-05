@@ -2,7 +2,7 @@ config:
   # make sure the target below is not https, otherwise all requests will result in errors
   target: 'http://localhost:4000' 
   phases:
-    - duration: 30
+    - duration: 120
       arrivalRate: 1000
   # defaults:
   #   headers:
@@ -10,4 +10,7 @@ config:
 scenarios:
   - flow:
     - get:
-        url: '/restaurants/42'
+        url: '/restaurants/9999999'
+
+# ARTILLERY COMMANDS:
+# npx artillery run artilleryTest.yml

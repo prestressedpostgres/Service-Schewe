@@ -47,6 +47,18 @@ let save = (restaurant, callback) => {
   })
 }
 
+// GET request - findById
+let findById = (id, callback) => {
+  Restaurants.find({ID: id}, (err, results) => {
+    if (err) {return callback(err, 'error finding record')}
+      return results;
+  })
+  .then((restaurantResult) => {
+    return callback(restaurantResult)
+  });
+}
+
+// LOAD
 let load = callback => {
   let cb = (err, result) => { callback(result) };
   Restaurants.find(cb).limit(6);
@@ -85,4 +97,5 @@ let nearby = (query, callback) => {
 module.exports.Restaurants = Restaurants;
 module.exports.save = save;
 module.exports.load = load;
+module.exports.findById = findById;
 module.exports.nearby = nearby;

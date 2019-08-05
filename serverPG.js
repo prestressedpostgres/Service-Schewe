@@ -1,3 +1,4 @@
+require('newrelic');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -14,10 +15,13 @@ app.get('/', (req, res) => {
 
 app.get('/restaurants', db.getRestaurants);
 app.get('/restaurants/:id', db.getRestaurantById);
-app.post('/restaurants', db.addRecord);
+app.post('/restaurants/:name', db.addRecord);
 app.put('/restaurants/:id', db.updateRecord);
 app.delete('/restaurants/:id', db.deleteRestaurant);
 
 app.listen(port, () => {
-  console.log(`App running on port ${port}.`);
+  console.log(`***App running on port ${port}***`);
 });
+
+// ARTILLERY COMMANDS:
+// npx artillery run artilleryTest.yml

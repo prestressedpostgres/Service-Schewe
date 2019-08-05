@@ -197,7 +197,7 @@ let records0 = [];
 
 let dataGenerator = (array) => {
 	let randomEntry = 0;
-	for (var i = 1; i <= 1000000; i++) { // modify the number to the left to insert a differnet amount of entries
+	for (var i = 7500001; i <= 10000000; i++) { // modify the number to the left to insert a differnet amount of entries
 		// db.save({
 			randomEntry = Math.ceil(Math.random() * restaurantNames.length - 1);
 			array.push({
@@ -251,13 +251,13 @@ module.exports.dataGenerator = dataGenerator;
 // *USE THE FOLLOWING COMMANDS TO HELP IMPORT A CSV FILE INTO MONGODB
 // ** DO NOT use the shell for mongo - use a new terminal
 // template>>>> mongoimport --db users --collection contacts --type csv --headerline --file /opt/backups/contacts.csv
-// actual>>>>>> mongoimport --db zagatdb --collection cities --type csv --headerline --file /Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/testData4.csv
+// actual>>>>>> mongoimport --db zagatdb --collection cities --type csv --headerline --file /Users/danielschewe/Documents/GHRBLD03/FrontEndCapstone-Service-Bourget/testData1.csv
 
 // USEFUL shell commands:
 // db.collection.count()
 // db.collection.remove({})
 // db.collection.find().pretty()
-// ps -ef | grep mongo
+// ps -ef | grep mongo, then use kill <number> to end the process
 
 
 // * USE THE FOLLOWING COMMANDS TO HELP IMPORT A CSV FILE INTO POSTGRES
