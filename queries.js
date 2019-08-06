@@ -26,7 +26,7 @@ const getRestaurantById = (request, response) => {
       }
       response.status(200).json(results.rows)
   });
-}
+};
 
 // POST new restaurant using 'name'
 const addRecord = (request, response) => {
@@ -39,7 +39,7 @@ const addRecord = (request, response) => {
       }
       response.status(201).send(`Restaurant added with ID: ${result.insertId}`);
   });
-}
+};
 
 // UPDATE restaurant
 const updateRecord = (request, response) => {
@@ -53,10 +53,11 @@ const updateRecord = (request, response) => {
       if (error) {
         throw error
       }
-      response.status(200).send(`Restaurants modified with ID: ${id}`)
+      response.status(200).send(`Restaurants modified with ID: ${id}`);
       }
   );
 }
+
 // DELETE restaurant by id
 const deleteRestaurant = (request, response) => {
   const id = parseInt(request.params.id)
