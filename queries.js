@@ -7,13 +7,13 @@ const pool = new Pool({
   port: 5432,
 });
 
-// GET all restaurants, sorted by id (ascending)
+// GET all restaurants, sorted by id (ascending) but limited to 6 entries
 const getRestaurants = (request, response) => {
-  pool.query('SELECT * FROM restaurants ORDER BY id ASC', (error, results) => {
+  pool.query('SELECT * FROM restaurants ORDER BY id ASC LIMIT 6', (error, results) => {
     if (error) {
       throw error
     }
-    response.status(200).json(results.rows)
+    response.status(200).json(results.rows);
   });
 }
 

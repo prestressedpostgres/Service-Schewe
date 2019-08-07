@@ -58,7 +58,7 @@ let findById = (id, callback) => {
   });
 }
 
-// LOAD
+// LOAD 6 images
 let load = callback => {
   let cb = (err, result) => { callback(result) };
   Restaurants.find(cb).limit(6);

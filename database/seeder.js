@@ -195,6 +195,7 @@ let csvWriter = createCsvWriter({
 // dataset to be used when creating csv files
 let records0 = [];
 
+// create csv file with 2,500,000 entries
 let dataGenerator = (array) => {
 	let randomEntry = 0;
 	for (var i = 7500001; i <= 10000000; i++) { // modify the number to the left to insert a differnet amount of entries
@@ -231,6 +232,7 @@ csvWriter.writeRecords(records0)     // returns a promise
 	console.timeEnd('Processing time: ');
 });
 
+// the promise resolve pattern below should be used to automate the generation of one very large csv file
 // Promise.resolve()
 // .then(() => csvWriter.writeRecords(dataGenerator()))
 // .then(() => csvWriter.writeRecords(dataGenerator()))

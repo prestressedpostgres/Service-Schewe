@@ -10,10 +10,8 @@ class App extends React.Component {
       restaurants: [],
       name: "The Kitchen",
       style: "Food"
-
     }
   }
-
 
   handleClick(e) {
     e.preventDefault();
@@ -41,7 +39,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/api/cities')
+    axios.get('/')
       .then(result => this.setState({
         restaurants: result.data
       }))

@@ -1,4 +1,4 @@
-require('newrelic');
+// require('newrelic');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -9,11 +9,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const port = 4000;
 
-app.get('/', (req, res) => {
-    res.json({ info: 'Node.js, Express, and Postgres API' })
-});
-
-app.get('/restaurants', db.getRestaurants);
+// this GET is limited to 6 entries
+app.get('/', db.getRestaurants);
+// app.get('/restaurants', db.getRestaurants);
 app.get('/restaurants/:id', db.getRestaurantById);
 app.post('/restaurants/:name', db.addRecord);
 app.put('/restaurants/:id', db.updateRecord);

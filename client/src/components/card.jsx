@@ -13,4 +13,4 @@ export default function Cards(props) {
 	)
 }
 
-//Cards expexts an array of objects 
+//Cards expects an array of objects
