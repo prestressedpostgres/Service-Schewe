@@ -30,14 +30,14 @@ const getRestaurantById = (request, response) => {
 
 // POST new restaurant using 'name'
 const addRecord = (request, response) => {
-  const { id, name, description, style, price, rating, img_url, location } = request.body
-  // console.log(request.body);
+  const { name, description, style, price, rating, img_url, location } = request.body;
+  console.log(request.body);
 
-  pool.query('INSERT INTO restaurants (id, name, description, style, price, rating, img_url, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [id, name, description, style, price, rating, img_url, location], (error, results) => {
+  pool.query('INSERT INTO restaurants (name, description, style, price, rating, img_url, location) VALUES ($1, $2, $3, $4, $5, $6, $7)', [name, description, style, price, rating, img_url, location], (error, results) => {
       if (error) {
         throw error
       }
-      response.status(201).send(`Restaurant added with ID: ${result.insertId}`);
+      response.status(201).send(`Restaurant added with ID: ${results.insertId}`);
   });
 };
 

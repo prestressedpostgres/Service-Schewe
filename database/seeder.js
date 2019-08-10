@@ -202,7 +202,7 @@ let dataGenerator = (array) => {
 		// db.save({
 			randomEntry = Math.ceil(Math.random() * restaurantNames.length - 1);
 			array.push({
-				id: i,
+				// id: i, - this is not needed for Postgres since it will auto-increment
 				name: restaurantNames[randomEntry],
 				description: randomSentence(),
 				style: styleGenerator(),
